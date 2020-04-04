@@ -31,13 +31,18 @@ def sentToTokens(sentence):
 
 def readData(files):
     '''
-    Reads data from given files and
+    Reads data from given files and outputs the data as a list of tuples
+    ((sentenceTokens, replaceStartIndex, replaceEndIndex), replacement word, score)
+
+    Create new sentence by doing sentenceTokens[replaceStartIndex:replaceEndIndex] = [replacement]
     '''
     trainDF = pd.read_csv(files[0])
     for fileName in files[1:]:
         trainDf = trainDF.append(pd.read_csv(filesName))
 
     return zip(sentToTokens(sent) for sent in trainDF.original, trainDF.edit, trainDF.meanGrade)
+
+
 
 
 
