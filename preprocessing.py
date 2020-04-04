@@ -1,4 +1,5 @@
 from pathlib import Path
+import copy
 
 import pandas as pd
 import numpy as np
@@ -51,7 +52,7 @@ def model2preprocessing(files):
     training_data = []
     for data_point in raw_data:
         (original_sentence, replStart, replEnd), repl, score = data_point[0]
-        new_sentence = original_sentence
+        new_sentence = copy.deepcopy(original_sentence)
         new_sentence[replStart:replEnd] = [repl]
 
         two_sentences = original_sentence + new_sentence
