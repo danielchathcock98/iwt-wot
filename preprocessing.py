@@ -45,6 +45,22 @@ def readData(files):
 
 '''
 This returns the following training data: 
+Treat each data point (headline and replacement) as two separate data points: the original headline with a humor score 
+of 0, and the altered headline with a humor score associated with that data point.'''
+def model1preprocessing(files):
+    raw_data = readData(files)
+    training_data = []
+    for data_point in raw_data:
+        (original_sentence, replStart, replEnd), repl, score = data_point
+        new_sentence = copy.deepcopy(original_sentence)
+        new_sentence[replStart:replEnd] = [repl]
+
+        training_data.append((original_sentence, 0))
+        training_data.append((new_sentence, score))
+    return training_data
+
+'''
+This returns the following training data: 
 One data point is the original headline and the full altered headline concatenated together.
 '''
 def model2preprocessing(files):
@@ -58,6 +74,24 @@ def model2preprocessing(files):
         two_sentences = original_sentence + new_sentence
         training_data.append((two_sentences, score))
     return training_data
+
+'''
+This returns the following training data: 
+The model runs the original headline through one LSTM, the altered headline through a separate LSTM, then performs some
+function on the two outputs to predict a score.
+'''
+def model3preprocessing(files):
+    raw_data = readData(files)
+    original_training_data = []
+    new_training_data = []
+    for data_point in raw_data:
+        (original_sentence, replStart, replEnd), repl, score = data_point
+        new_sentence = copy.deepcopy(original_sentence)
+        new_sentence[replStart:replEnd] = [repl]
+
+        original_training_data.append((original_sentence, score))
+        new_training_data.append((new_sentence, score))
+    return original_training_data, new_training_data
 
 
 if __name__ == '__main__':
