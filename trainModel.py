@@ -1,17 +1,19 @@
 import torch
 
 import torch.optim as optim
+import torch.nn as nn
 import random
+import math
 
-from model import Model2
-from preprocessing import model2Preprocessing
+from model import Model2, LEARNING_RATE, EPOCHS
+from preprocessing import model2preprocessing, TASK_1, EXTRA_TRAIN_TASK_1
+from wordEmbedding import Embedding
 
-EMBEDDING_DIM = 8
-HIDDEN_DIM = 12
-LEARNING_RATE = 0.3
-LSTM_LAYERS = 1
-DROPOUT = 0
-EPOCHS = 30
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+training_data = None
+val_data = None
+embed = None
 
 def train(epoch, model, loss_function, optimizer):
     train_loss = 0
@@ -26,18 +28,18 @@ def train(epoch, model, loss_function, optimizer):
         #############################################################################
         model.zero_grad()
 
-        sent_seq = prepare_sequence(sentence, word_to_idx).to(device)
-        tag_seq = prepare_sequence(tags, tag_to_idx).to(device)
+        embedding = torch.tensor(embed_sentence(inputData)).to(device)
 
-        tag_output = model(sent_seq)
+        score_output = model(sent_seq)
 
-        loss = loss_function(tag_output, tag_seq)
+        loss = loss_function(score_output, score)
 
         train_loss += loss.item()
-        train_examples += len(sentence)
 
         loss.backward()
         optimizer.step()
+
+        train_examples += 1
 
         #############################################################################
         #                             END OF YOUR CODE                              #
@@ -56,45 +58,46 @@ def evaluate(model, loss_function, optimizer):
   # returns:: avg_val_loss (float)
   # returns:: val_accuracy (float)
     val_loss = 0
-    correct = 0
+    square_error = 0
     val_examples = 0
     with torch.no_grad():
-        for sentence, tags in val_data:
+        for inputData, score in val_data:
             #############################################################################
-            # TODO: Implement the evaluate loop
-            # Find the average validation loss along with the validation accuracy.
-            # Hint: To find the accuracy, argmax of tag predictions can be used.
+            # TODO: Implement the training loop
+            # Hint: you can use the prepare_sequence method for creating index mappings
+            # for sentences. Find the gradient with respect to the loss and update the
+            # model parameters using the optimizer.
             #############################################################################
+            embedding = torch.tensor(embed_sentence(inputData)).to(device)
 
-            sent_seq = prepare_sequence(sentence, word_to_idx).to(device)
-            tag_seq = prepare_sequence(tags, tag_to_idx).to(device)
+            score_output = model(sent_seq)
 
-            tag_output = model(sent_seq)
-
-            loss = loss_function(tag_output, tag_seq)
+            loss = loss_function(score_output, score)
             val_loss += loss.item()
-            correct += (tag_output.argmax(1) == tag_seq).sum().item()
+            square_error += (score_output - score)**2
 
-            val_examples += len(sentence)
+            val_examples += 1
 
             #############################################################################
             #                             END OF YOUR CODE                              #
             #############################################################################
-    val_accuracy = 100. * correct / val_examples
+    rmse = math.sqrt(square_error / val_examples)
     avg_val_loss = val_loss / val_examples
     return avg_val_loss, val_accuracy
 
 
 
-
 if __name__ == '__main__':
     random.seed(1)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(device)
 
-    model = BasicPOSTagger(EMBEDDING_DIM, HIDDEN_DIM, len(word_to_idx), len(tag_to_idx)).to(device)
+    model = Model2().to(device)
     optimizer = torch.optim.SGD(model.parameters(), lr=LEARNING_RATE)
-    loss_function = nn.CrossEntropyLoss()
+    loss_function = nn.MSELoss()
+
+    training_data = model2preprocessing([TASK_1 / 'train.csv', EXTRA_TRAIN_TASK_1])
+    dev_data = model2preprocessing([TASK_1 / 'dev.csv'])
+    embed = Embedding()
 
     for epoch in range(1, EPOCHS + 1):
         train(epoch, model, loss_function, optimizer)

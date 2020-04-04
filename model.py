@@ -10,7 +10,7 @@ EPOCHS = 30
 
 class Model2(nn.Module):
 
-    def __init__(self, embedding_dim, hidden_dim, vocab_size, tagset_size):
+    def __init__(self):
         super(Model2, self).__init__()
         #############################################################################
         # TODO: Define and initialize anything needed for the forward pass.
@@ -19,12 +19,12 @@ class Model2(nn.Module):
         # an LSTM layer: that takes word embeddings as input and outputs hidden states
         # a Linear layer: maps from hidden state space to tag space
         #############################################################################
-        #self.embedding_dim = embedding_dim
-        self.hidden_dim = hidden_dim
+        # self.embedding_dim = embedding_dim
+        self.hidden_dim = HIDDEN_DIM
 
         #self.encoder = nn.Embedding(vocab_size, embedding_dim)
-        self.lstm = nn.LSTM(embedding_dim, hidden_dim, num_layers=LSTM_LAYERS, dropout=DROPOUT)
-        self.decoder = nn.Linear(hidden_dim, 1)  # We output a single score now.
+        self.lstm = nn.LSTM(EMBEDDING_DIM, HIDDEN_DIM, num_layers=LSTM_LAYERS, dropout=DROPOUT)
+        self.decoder = nn.Linear(HIDDEN_DIM, 1)  # We output a single score now.
 
         #############################################################################
         #                             END OF YOUR CODE                              #
