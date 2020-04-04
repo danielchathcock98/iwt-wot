@@ -41,7 +41,7 @@ class Model2(nn.Module):
 
         #encoded = self.encoder(sentence)
         #lstmOut, _ = self.lstm(encoded.view(-1, 1, self.embedding_dim))
-        lstmOut, _ = self.lstm(encoded_sentence.view(-1, 1, EMBEDDING_DIM))
-        score = self.decoder(lstmOut.view(-1, self.hidden_dim))
+        _, (lstm_hn, _) = self.lstm(encoded_sentence.view(-1, 1, EMBEDDING_DIM))
+        score = self.decoder(lstm_hn.view(self.hidden_dim))
 
         return score

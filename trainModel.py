@@ -29,11 +29,11 @@ def train(epoch, model, loss_function, optimizer):
         model.zero_grad()
 
         embedding = torch.tensor(embed.embed_sentence(inputData)).to(device)
+        score_tensor = torch.tensor([score]).to(device)
 
         score_output = model(embedding)
 
-        loss = loss_function(score_output, score)
-
+        loss = loss_function(score_output, score_tensor)
         train_loss += loss.item()
 
         loss.backward()
@@ -46,13 +46,13 @@ def train(epoch, model, loss_function, optimizer):
         #############################################################################
 
     avg_train_loss = train_loss / train_examples
-    avg_val_loss, val_accuracy = evaluate(model, loss_function, optimizer)
+    avg_val_loss, val_rmse = evaluate(model, loss_function, optimizer)
 
-    print("Epoch: {}/{}\tAvg Train Loss: {:.4f}\tAvg Val Loss: {:.4f}\t Val Accuracy: {:.0f}".format(epoch,
+    print("Epoch: {}/{}\tAvg Train Loss: {:.4f}\tAvg Val Loss: {:.4f}\t Val RMSE: {:.4f}".format(epoch,
                                                                       EPOCHS,
                                                                       avg_train_loss,
                                                                       avg_val_loss,
-                                                                      val_accuracy))
+                                                                      val_rmse))
 
 def evaluate(model, loss_function, optimizer):
   # returns:: avg_val_loss (float)
@@ -69,21 +69,23 @@ def evaluate(model, loss_function, optimizer):
             # model parameters using the optimizer.
             #############################################################################
             embedding = torch.tensor(embed.embed_sentence(inputData)).to(device)
+            score_tensor = torch.tensor([score]).to(device)
 
             score_output = model(embedding)
 
-            loss = loss_function(score_output, score)
+            loss = loss_function(score_output, score_tensor)
             val_loss += loss.item()
-            square_error += (score_output - score)**2
+            square_error += (score_output.item() - score)**2
 
             val_examples += 1
 
             #############################################################################
             #                             END OF YOUR CODE                              #
             #############################################################################
+
     rmse = math.sqrt(square_error / val_examples)
     avg_val_loss = val_loss / val_examples
-    return avg_val_loss, val_accuracy
+    return avg_val_loss, rmse
 
 
 
@@ -96,7 +98,7 @@ if __name__ == '__main__':
     loss_function = nn.MSELoss()
 
     training_data = model2preprocessing([TASK_1 / 'train.csv', EXTRA_TRAIN_TASK_1])
-    dev_data = model2preprocessing([TASK_1 / 'dev.csv'])
+    val_data = model2preprocessing([TASK_1 / 'dev.csv'])
     embed = Embedding()
 
     for epoch in range(1, EPOCHS + 1):

@@ -39,13 +39,13 @@ def readData(files):
     '''
     trainDF = pd.read_csv(files[0])
     for fileName in files[1:]:
-        trainDf = trainDF.append(pd.read_csv(fileName))
+        trainDF = trainDF.append(pd.read_csv(fileName), ignore_index=True)
 
     return zip((sentToTokens(sent) for sent in trainDF.original), trainDF.edit, trainDF.meanGrade)
 
 '''
-This returns the following training data: 
-Treat each data point (headline and replacement) as two separate data points: the original headline with a humor score 
+This returns the following training data:
+Treat each data point (headline and replacement) as two separate data points: the original headline with a humor score
 of 0, and the altered headline with a humor score associated with that data point.'''
 def model1preprocessing(files):
     raw_data = readData(files)
@@ -60,7 +60,7 @@ def model1preprocessing(files):
     return training_data
 
 '''
-This returns the following training data: 
+This returns the following training data:
 One data point is the original headline and the full altered headline concatenated together.
 '''
 def model2preprocessing(files):
@@ -76,7 +76,7 @@ def model2preprocessing(files):
     return training_data
 
 '''
-This returns the following training data: 
+This returns the following training data:
 The model runs the original headline through one LSTM, the altered headline through a separate LSTM, then performs some
 function on the two outputs to predict a score.
 '''
