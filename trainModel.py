@@ -28,9 +28,9 @@ def train(epoch, model, loss_function, optimizer):
         #############################################################################
         model.zero_grad()
 
-        embedding = torch.tensor(embed_sentence(inputData)).to(device)
+        embedding = torch.tensor(embed.embed_sentence(inputData)).to(device)
 
-        score_output = model(sent_seq)
+        score_output = model(embedding)
 
         loss = loss_function(score_output, score)
 
@@ -68,9 +68,9 @@ def evaluate(model, loss_function, optimizer):
             # for sentences. Find the gradient with respect to the loss and update the
             # model parameters using the optimizer.
             #############################################################################
-            embedding = torch.tensor(embed_sentence(inputData)).to(device)
+            embedding = torch.tensor(embed.embed_sentence(inputData)).to(device)
 
-            score_output = model(sent_seq)
+            score_output = model(embedding)
 
             loss = loss_function(score_output, score)
             val_loss += loss.item()

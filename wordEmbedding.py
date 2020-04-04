@@ -1,7 +1,6 @@
 import fasttext
-from pathlib import Path
 
-MODEL_PATH = Path('englishVecs/cc.en.300.bin')
+MODEL_PATH = 'englishVecs/cc.en.300.bin'
 
 class Embedding():
 
