@@ -70,3 +70,8 @@ if __name__ == '__main__':
     altered = sent
     altered[replStart:replEnd] = [repl]
     print(f'altered: {altered}')
+
+    print()
+    print('Sherry Test')
+    training_data = model2preprocessing([TASK_1 / 'train.csv', EXTRA_TRAIN_TASK_1])
+    print(training_data[0])
