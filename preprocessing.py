@@ -38,13 +38,19 @@ def readData(files):
     '''
     trainDF = pd.read_csv(files[0])
     for fileName in files[1:]:
-        trainDf = trainDF.append(pd.read_csv(filesName))
+        trainDf = trainDF.append(pd.read_csv(fileName))
 
-    return zip(sentToTokens(sent) for sent in trainDF.original, trainDF.edit, trainDF.meanGrade)
-
-
+    return zip((sentToTokens(sent) for sent in trainDF.original), trainDF.edit, trainDF.meanGrade)
 
 
 
 if __name__ == '__main__':
-    readTrainingData()
+    training_data = list(readData([TASK_1 / 'train.csv', EXTRA_TRAIN_TASK_1]))
+    print(len(training_data))
+
+    (sent, replStart, replEnd), repl, score = training_data[0]
+    print(training_data[0])
+    print(f'original: {sent}')
+    altered = sent
+    altered[replStart:replEnd] = [repl]
+    print(f'altered: {altered}')
