@@ -51,7 +51,7 @@ def model2preprocessing(files):
     raw_data = readData(files)
     training_data = []
     for data_point in raw_data:
-        (original_sentence, replStart, replEnd), repl, score = data_point[0]
+        (original_sentence, replStart, replEnd), repl, score = data_point
         new_sentence = copy.deepcopy(original_sentence)
         new_sentence[replStart:replEnd] = [repl]
 
