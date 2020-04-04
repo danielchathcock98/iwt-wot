@@ -42,6 +42,21 @@ def readData(files):
 
     return zip((sentToTokens(sent) for sent in trainDF.original), trainDF.edit, trainDF.meanGrade)
 
+'''
+This returns the following training data: 
+One data point is the original headline and the full altered headline concatenated together.
+'''
+def model2preprocessing(files):
+    raw_data = readData(files)
+    training_data = []
+    for data_point in raw_data:
+        (original_sentence, replStart, replEnd), repl, score = data_point[0]
+        new_sentence = original_sentence
+        new_sentence[replStart:replEnd] = [repl]
+
+        two_sentences = original_sentence + new_sentence
+        training_data.append((two_sentences, score))
+    return training_data
 
 
 if __name__ == '__main__':
