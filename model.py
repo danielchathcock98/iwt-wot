@@ -46,4 +46,4 @@ class Model2(nn.Module):
         score = self.decoder(lstm_hn.view(self.hidden_dim))
         probability_vector = self.softmax_layer(score)
 
-        return probability_vector[0]
+        return probability_vector
