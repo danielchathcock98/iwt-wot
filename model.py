@@ -25,7 +25,7 @@ class Model2(nn.Module):
         #self.encoder = nn.Embedding(vocab_size, embedding_dim)
         self.lstm = nn.LSTM(EMBEDDING_DIM, HIDDEN_DIM, num_layers=LSTM_LAYERS, dropout=DROPOUT)
         self.decoder = nn.Linear(HIDDEN_DIM, 2)  # We output 2D vector (binary classification).
-        self.softmax_layer = nn.LogSoftmax(dim=2)
+        self.softmax_layer = nn.LogSoftmax()
 
         #############################################################################
         #                             END OF YOUR CODE                              #
