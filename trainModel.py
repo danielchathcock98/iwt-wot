@@ -100,7 +100,7 @@ if __name__ == '__main__':
 
     model = Model2().to(device)
     optimizer = torch.optim.SGD(model.parameters(), lr=LEARNING_RATE)
-    loss_function = nn.MSELoss()
+    loss_function = nn.NLLLoss()
 
     training_data = model2preprocessing([TASK_1 / 'train.csv', EXTRA_TRAIN_TASK_1])
     val_data = model2preprocessing([TASK_1 / 'dev.csv'])
