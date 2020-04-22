@@ -24,7 +24,8 @@ class Model2(nn.Module):
 
         #self.encoder = nn.Embedding(vocab_size, embedding_dim)
         self.lstm = nn.LSTM(EMBEDDING_DIM, HIDDEN_DIM, num_layers=LSTM_LAYERS, dropout=DROPOUT)
-        self.decoder = nn.Linear(HIDDEN_DIM, 1)  # We output a single score now.
+        self.decoder = nn.Linear(HIDDEN_DIM, 2)  # We output 2D vector (binary classification).
+        self.softmax_layer = nn.LogSoftmax(dim=2)
 
         #############################################################################
         #                             END OF YOUR CODE                              #
@@ -43,5 +44,6 @@ class Model2(nn.Module):
         #lstmOut, _ = self.lstm(encoded.view(-1, 1, self.embedding_dim))
         _, (lstm_hn, _) = self.lstm(encoded_sentence.view(-1, 1, EMBEDDING_DIM))
         score = self.decoder(lstm_hn.view(self.hidden_dim))
+        probability_vector = self.softmax_layer(score)
 
-        return score
+        return probability_vector[0]

@@ -29,7 +29,10 @@ def train(epoch, model, loss_function, optimizer):
         model.zero_grad()
 
         embedding = torch.tensor(embed.embed_sentence(inputData)).to(device)
-        score_tensor = torch.tensor([score]).to(device)
+        #score_tensor = torch.tensor([score]).to(device)    OLD WAY OF USING SCORE
+
+        thresholded_score = round(score/3)
+        score_tensor = torch.tensor([thresholded_score]).to(device)
 
         score_output = model(embedding)
 
@@ -69,7 +72,9 @@ def evaluate(model, loss_function, optimizer):
             # model parameters using the optimizer.
             #############################################################################
             embedding = torch.tensor(embed.embed_sentence(inputData)).to(device)
-            score_tensor = torch.tensor([score]).to(device)
+            #score_tensor = torch.tensor([score]).to(device)  OLD
+            thresholded_score = round(score / 3)
+            score_tensor = torch.tensor([thresholded_score]).to(device)
 
             score_output = model(embedding)
 
