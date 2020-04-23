@@ -4,6 +4,7 @@ import copy
 import pandas as pd
 import numpy as np
 import math
+from scipy import stats
 
 
 # ----------------- Paths for data files -------------------------------------------------
@@ -50,7 +51,7 @@ def mean_baseline(files):
     for data_point in raw_data:
         (original_sentence, replStart, replEnd), repl, score = data_point
         all_scores.append(score)
-    return np.mean(all_scores)
+    return stats.mode(all_scores)[0]
 
 def evaluate_baseline(files):
     baseline_score = mean_baseline(files)
