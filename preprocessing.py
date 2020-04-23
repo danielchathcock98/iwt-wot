@@ -90,7 +90,7 @@ def model3preprocessing(files):
         new_sentence = copy.deepcopy(original_sentence)
         new_sentence[replStart:replEnd] = [repl]
 
-        training_data.append(original_sentence, new_sentence, score)
+        training_data.append((original_sentence, new_sentence, score))
     return training_data
 
 
