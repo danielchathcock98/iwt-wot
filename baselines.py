@@ -54,6 +54,7 @@ def mean_baseline(files):
 
 def evaluate_baseline(files):
     baseline_score = mean_baseline(files)
+    print(baseline_score)
     raw_data = readData(files)
 
     square_error = 0
