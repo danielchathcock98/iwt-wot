@@ -38,5 +38,8 @@ def evaluate_baseline(baseline_score, files):
     return rmse
 
 if __name__ == '__main__':
-    print(evaluate_baseline(mode_baseline([TASK_1 / 'train.csv', EXTRA_TRAIN_TASK_1]), [TASK_1 / 'dev.csv']))
-    print(evaluate_baseline(mean_baseline([TASK_1 / 'train.csv', EXTRA_TRAIN_TASK_1]), [TASK_1 / 'dev.csv']))
+    print('mode baseline:')
+    print(evaluate_baseline(mode_baseline([TASK_1 / 'train.csv', EXTRA_TRAIN_TASK_1, TASK_1 / 'dev.csv']), [TASK_1 / 'test.csv']))
+
+    print('mean baseline:')
+    print(evaluate_baseline(mean_baseline([TASK_1 / 'train.csv', EXTRA_TRAIN_TASK_1, TASK_1 / 'dev.csv']), [TASK_1 / 'test.csv']))
