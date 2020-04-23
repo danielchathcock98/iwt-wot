@@ -80,7 +80,7 @@ def evaluate(model, loss_function, optimizer):
 
             loss = loss_function(score_output, score_tensor)
             val_loss += loss.item()
-            square_error += (3*math.exp(score_output[0].item()) - score)**2
+            square_error += (3*math.exp(score_output[1].item()) - score)**2
 
             val_examples += 1
 
