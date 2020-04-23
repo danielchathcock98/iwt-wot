@@ -82,16 +82,16 @@ function on the two outputs to predict a score.
 '''
 def model3preprocessing(files):
     raw_data = readData(files)
-    original_training_data = []
-    new_training_data = []
+    #original_training_data = []
+    #new_training_data = []
+    training_data = []
     for data_point in raw_data:
         (original_sentence, replStart, replEnd), repl, score = data_point
         new_sentence = copy.deepcopy(original_sentence)
         new_sentence[replStart:replEnd] = [repl]
 
-        original_training_data.append((original_sentence, score))
-        new_training_data.append((new_sentence, score))
-    return original_training_data, new_training_data
+        training_data.append(original_sentence, new_sentence, score)
+    return training_data
 
 
 if __name__ == '__main__':
