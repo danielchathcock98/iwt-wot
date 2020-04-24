@@ -68,7 +68,7 @@ def model1preprocessing(files):
         new_sentence = copy.deepcopy(original_sentence)
         new_sentence[replStart:replEnd] = [repl]
 
-        training_data.append((original_sentence, 0))
+        training_data.append((original_sentence, 0.0))
         training_data.append((new_sentence, score))
     return training_data
 
