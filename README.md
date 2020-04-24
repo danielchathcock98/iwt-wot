@@ -33,4 +33,6 @@ Make a directory in the iwt-wot directory titled `englishVecs`, and place the fi
 
 ### Run code
 
-Can run baselines.py and makeFigures.py independently. To run iwt-wot.ipynb, open it in a Jupyter notebook. Ignore the first 4 cells (only necessary if running in Google Colab). In 5th cell, change DRIVE_DIR path to reflect the location of the iwt-wot directory (should be the working directory, unless you moved iwt-wot.ipynb). Then all other cells can be run as usual. 
+Can run baselines.py and makeFigures.py independently. To run iwt-wot.ipynb, open it in a Jupyter notebook. Ignore the first 4 cells (only necessary if running in Google Colab). In 5th cell, change DRIVE_DIR path to reflect the location of the iwt-wot directory (should be the working directory, unless you moved iwt-wot.ipynb). Then all other cells can be run as usual.
+
+To reproduce the results of our project, just follow the guidance in the Markdown cells. They show which cells to run for training and testing of each sub-task. 

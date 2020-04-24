@@ -13,7 +13,7 @@ def task1():
 def task2():
     data2 = readDataTask2([TASK_2 / 'train.csv', TASK_2 / 'dev.csv', EXTRA_TRAIN_TASK_2])
     labels = [label for _, _, _, _, label in data2]
-    plt.hist(labels, bins=np.arange(4)-0.5)
+    plt.hist(labels, bins=np.arange(4)-0.5, rwidth=0.9)
     plt.xticks(np.arange(3), np.arange(3))
     plt.show()
     
