@@ -54,7 +54,7 @@ def readDataTask2(files):
     for fileName in files[1:]:
         trainDF = trainDF.append(pd.read_csv(fileName), ignore_index=True)
 
-    return zip((sentToTokens(sent) for sent in trainDF.original1), trainDF.edit1, trainDF.meanGrade1, (sentToTokens(sent) for sent in trainDF.original2), trainDF.edit2, trainDF.meanGrade2,)
+    return zip((sentToTokens(sent) for sent in trainDF.original1), trainDF.edit1, (sentToTokens(sent) for sent in trainDF.original2), trainDF.edit2, trainDF.label)
 
 '''
 This returns the following training data:
@@ -108,15 +108,23 @@ def model3preprocessing(files):
 
 def task2preprocessing(files):
     raw_data = readDataTask2(files)
-    return list(raw_data)[0]
+    training_data = []
+    for data_point in raw_data:
+        (original_sentence1, replStart1, replEnd1), repl1, (original_sentence2, replStart2, replEnd2), repl2, label = data_point
+        newsentence_1 = copy.deepcopy(original_sentence1)
+        newsentence_1[replStart1: replEnd1] = [repl1]
 
+        newsentence_2 = copy.deepcopy(original_sentence2)
+        newsentence_2[replStart2: replEnd2] = [repl2]
+        training_data.append((original_sentence1, newsentence_1, original_sentence2, newsentence_2, label))
 
+    return training_data
 
 if __name__ == '__main__':
     training_data = list(readDataTask2([TASK_2 / 'train.csv', EXTRA_TRAIN_TASK_2]))
     print(len(training_data))
 
-    (sent1, replStart1, replEnd1), repl1, score1, (sent2, replStart2, replEnd2), repl2, score2 = training_data[0]
+    (sent1, replStart1, replEnd1), repl1, (sent2, replStart2, replEnd2), repl2, label = training_data[0]
     print(training_data[0])
     print(f'first original: {sent1}')
     print(f'second original: {sent2}')
