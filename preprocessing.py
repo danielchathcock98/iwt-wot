@@ -43,6 +43,19 @@ def readData(files):
 
     return zip((sentToTokens(sent) for sent in trainDF.original), trainDF.edit, trainDF.meanGrade)
 
+def readDataTask2(files):
+    '''
+    Reads data from given files and outputs the data as a list of tuples
+    ((sentenceTokens, replaceStartIndex, replaceEndIndex), replacement word, score)
+
+    Create new sentence by doing sentenceTokens[replaceStartIndex:replaceEndIndex] = [replacement]
+    '''
+    trainDF = pd.read_csv(files[0])
+    for fileName in files[1:]:
+        trainDF = trainDF.append(pd.read_csv(fileName), ignore_index=True)
+
+    return zip((sentToTokens(sent) for sent in trainDF.original1), trainDF.edit1, trainDF.meanGrade1, (sentToTokens(sent) for sent in trainDF.original2), trainDF.edit2, trainDF.meanGrade2,)
+
 '''
 This returns the following training data:
 Treat each data point (headline and replacement) as two separate data points: the original headline with a humor score
@@ -93,19 +106,30 @@ def model3preprocessing(files):
         training_data.append((original_sentence, new_sentence, score))
     return training_data
 
+def task2preprocessing(files):
+    raw_data = readDataTask2(files)
+    return list(raw_data)[0]
+
+
 
 if __name__ == '__main__':
-    training_data = list(readData([TASK_1 / 'train.csv', EXTRA_TRAIN_TASK_1]))
+    training_data = list(readDataTask2([TASK_2 / 'train.csv', EXTRA_TRAIN_TASK_2]))
     print(len(training_data))
 
-    (sent, replStart, replEnd), repl, score = training_data[0]
+    (sent1, replStart1, replEnd1), repl1, score1, (sent2, replStart2, replEnd2), repl2, score2 = training_data[0]
     print(training_data[0])
-    print(f'original: {sent}')
-    altered = sent
-    altered[replStart:replEnd] = [repl]
+    print(f'first original: {sent1}')
+    print(f'second original: {sent2}')
+    altered = sent1
+    altered[replStart1:replEnd1] = [repl1]
+    print(f'altered: {altered}')
+    altered = sent2
+    altered[replStart2:replEnd2] = [repl2]
     print(f'altered: {altered}')
 
-    print()
-    print('Sherry Test')
-    training_data = model2preprocessing([TASK_1 / 'train.csv', EXTRA_TRAIN_TASK_1])
-    print(training_data[0])
+    #print()
+    #print('Sherry Test')
+    #training_data = model2preprocessing([TASK_1 / 'train.csv', EXTRA_TRAIN_TASK_1])
+    #print(training_data[0])
+
+    #print(task2preprocessing([TASK_2 / 'train.csv', EXTRA_TRAIN_TASK_2]))
