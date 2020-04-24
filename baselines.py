@@ -3,7 +3,7 @@ import numpy as np
 import math
 from scipy import stats
 
-from preprocessing import TASK_1, EXTRA_TRAIN_TASK_1, readData
+from preprocessing import TASK_1, EXTRA_TRAIN_TASK_1, readData, readDataTask2
 
 
 def mode_baseline(files):
@@ -18,9 +18,17 @@ def mean_baseline(files):
     raw_data = readData(files)
     all_scores = []
     for data_point in raw_data:
-        (original_sentence, replStart, replEnd), repl, score = data_point
+        (_, _, _), _, score = data_point
         all_scores.append(score)
     return sum(all_scores) / len(all_scores)
+
+def task2_baseline(files)
+    raw_data = readDataTask2(files)
+    all_labels = []
+    for data_point in raw_data:
+        (sent1, replStart1, replEnd1), repl1, (sent2, replStart2, replEnd2), repl2, label = data_point
+        all_labels.append(label)
+    return stats.mode(all_labels)[0][0]
     
 
 def evaluate_baseline(baseline_score, files):
